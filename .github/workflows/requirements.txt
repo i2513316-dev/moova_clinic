@@ -1,0 +1,5 @@
+Flask
+flask-bcrypt
+requests
+mysql-connector-python
+Flask-Mail
