@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita - MOOVA Clinic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='citas.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='image.png') }}" alt="Logo Moova Clinic">
+            <div class="logo">MOOVA <span>Clinic</span></div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li class="dropdown-wrap">
+                        <button class="btn-cita dropdown-toggle" type="button">
+                            <i class="fas fa-calendar-check"></i> Citas <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="{{ url_for('citas') }}" class="dropdown-item">
+                                <i class="fas fa-calendar-plus"></i>
+                                <span>Agendar cita</span>
+                            </a>
+                            <a href="{{ url_for('modificar_cita') }}" class="dropdown-item">
+                                <i class="fas fa-edit"></i>
+                                <span>Modificar cita</span>
+                            </a>
+                            <a href="{{ url_for('cancelar_cita') }}" class="dropdown-item">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Cancelar cita</span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-wrap">
+        <div class="page-header">
+            <span class="subtitle">Reserva tu espacio</span>
+            <h1>Agendar Cita</h1>
+            <p>Completa tus datos, elige fecha y selecciona el especialista</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    {% if msg == 'campos_vacios' %}
+                    <div class="alerta error" id="alerta-top"><i class="fas fa-exclamation-circle"></i> Por favor completa todos los campos, selecciona un médico y elige una fecha.</div>
+                    {% elif msg == 'dni_existente' %}
+                    <div class="alerta advertencia" id="alerta-top"><i class="fas fa-info-circle"></i> Ya existe un registro con ese DNI.</div>
+                    {% elif msg == 'fecha_pasada' %}
+                    <div class="alerta error" id="alerta-top"><i class="fas fa-calendar-times"></i> La fecha no puede ser en el pasado.</div>
+                    {% else %}
+                    <div class="alerta error" id="alerta-top"><i class="fas fa-times-circle"></i> {{ msg }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="container">
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-icon"><i class="fas fa-user-plus"></i></div>
+                    <h2>Tus Datos</h2>
+                    <p>Ingresa tu información personal y fecha deseada</p>
+                </div>
+                <form id="formCita" method="POST">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Nombre</label>
+                        <input type="text" name="nombre" id="nombre" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Apellido</label>
+                        <input type="text" name="apellido" id="apellido" placeholder="Tu apellido" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-id-card"></i> DNI</label>
+                            <input type="text" name="dni" id="dni" placeholder="12345678" maxlength="8" required>
+                            <small id="dni-status" style="display:none; margin-top:4px; font-size:0.8rem;"></small>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i> Teléfono</label>
+                            <input type="text" name="telefono" placeholder="987654321" maxlength="15" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Fecha de la cita</label>
+                        <input type="date" name="fecha_cita" id="fecha_cita" required>
+                    </div>
+
+                    <input type="hidden" name="medico_id" id="medico_id">
+
+                    <div id="medico-seleccionado" class="medico-badge" style="display:none;">
+                        <i class="fas fa-user-md"></i>
+                        <span id="medico-nombre-badge">Ninguno</span>
+                        <button type="button" onclick="limpiarMedico()" class="badge-remove"><i class="fas fa-times"></i></button>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="btn-submit" disabled>
+                        <i class="fas fa-calendar-check"></i> Confirmar Cita
+                    </button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <div class="form-header">
+                    <div class="form-icon"><i class="fas fa-stethoscope"></i></div>
+                    <h2>Médicos Disponibles</h2>
+                    <p>Selecciona el especialista de tu preferencia</p>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Especialista</th>
+                                <th>Especialidad</th>
+                                <th>Seleccionar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if terapeutas %}
+                                {% for m in terapeutas %}
+                                <tr id="fila-{{ m.ID }}">
+                                    <td>
+                                        <div class="medico-info">
+                                            <div class="medico-avatar">{{ m.Nombre[0].upper() }}</div>
+                                            {{ m.Nombre }}
+                                        </div>
+                                    </td>
+                                    <td><span class="especialidad-tag">{{ m.Especialidad }}</span></td>
+                                    <td>
+                                        <button class="btn-seleccionar" onclick="seleccionarMedico('{{ m.ID }}', '{{ m.Nombre }}')">
+                                            <i class="fas fa-check"></i> Elegir
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="3" class="empty-row"><i class="fas fa-user-slash"></i> No hay médicos disponibles.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Ocultar alertas automáticamente después de 4 segundos
+    const alertaTop = document.getElementById('alerta-top');
+    if (alertaTop) {
+        setTimeout(() => {
+            alertaTop.style.transition = 'opacity 0.5s';
+            alertaTop.style.opacity = '0';
+            setTimeout(() => alertaTop.remove(), 500);
+        }, 4000);
+    }
+
+    // Bloquear fechas pasadas
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha_cita').setAttribute('min', hoy);
+
+    // Autocompletar nombre y apellido con APISperú
+    const dniInput = document.getElementById('dni');
+    const dniStatus = document.getElementById('dni-status');
+    let dniTimer = null;
+
+    dniInput.addEventListener('input', function () {
+        clearTimeout(dniTimer);
+        const dni = this.value.trim();
+
+        if (dni.length !== 8 || !/^\d+$/.test(dni)) {
+            dniStatus.style.display = 'none';
+            return;
+        }
+
+        dniStatus.style.display = 'block';
+        dniStatus.style.color = '#888';
+        dniStatus.textContent = 'Buscando...';
+
+        dniTimer = setTimeout(async () => {
+            try {
+                const resp = await fetch('/api/verificar_dni', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dni })
+                });
+                const data = await resp.json();
+                if (data.success && data.data) {
+                    const d = data.data;
+                    document.getElementById('nombre').value = d.nombres || d.nombre || '';
+                    document.getElementById('apellido').value =
+                        ((d.apellido_paterno || d.apellidoPaterno || '') + ' ' +
+                         (d.apellido_materno || d.apellidoMaterno || '')).trim();
+                    dniStatus.style.color = '#27ae60';
+                    dniStatus.textContent = '✓ Datos encontrados';
+                } else {
+                    dniStatus.style.color = '#e74c3c';
+                    dniStatus.textContent = 'DNI no encontrado — ingresa los datos manualmente';
+                }
+            } catch {
+                dniStatus.style.color = '#e74c3c';
+                dniStatus.textContent = 'Error al consultar DNI';
+            }
+        }, 600);
+    });
+
+    function seleccionarMedico(id, nombre) {
+        document.querySelectorAll('tr').forEach(tr => tr.classList.remove('fila-seleccionada'));
+        const fila = document.getElementById('fila-' + id);
+        if (fila) fila.classList.add('fila-seleccionada');
+        document.getElementById('medico_id').value = id;
+        document.getElementById('medico-nombre-badge').textContent = nombre;
+        document.getElementById('medico-seleccionado').style.display = 'flex';
+        document.getElementById('btn-submit').disabled = false;
+    }
+
+    function limpiarMedico() {
+        document.getElementById('medico_id').value = '';
+        document.getElementById('medico-seleccionado').style.display = 'none';
+        document.getElementById('btn-submit').disabled = true;
+        document.querySelectorAll('tr').forEach(tr => tr.classList.remove('fila-seleccionada'));
+    }
+</script>
+
+<script>
+// Dropdown citas
+document.querySelectorAll('.dropdown-wrap').forEach(function(wrap) {
+    var toggle = wrap.querySelector('.dropdown-toggle');
+    toggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        wrap.classList.toggle('open');
+    });
+});
+document.addEventListener('click', function() {
+    document.querySelectorAll('.dropdown-wrap.open').forEach(function(w) { w.classList.remove('open'); });
+});
+</script>
+</body>
+</html>

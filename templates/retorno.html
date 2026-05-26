@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cita Reservada - MOOVA Clinic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='retorno.css') }}">
+</head>
+<body>
+
+    <div class="wrap">
+        <div class="card">
+
+            <div class="icono-check">
+                <i class="fas fa-check"></i>
+            </div>
+
+            <h1>¡Tu cita ha sido reservada!</h1>
+            <p class="subtitulo">Nos pondremos en contacto contigo pronto para confirmar los detalles.</p>
+
+            <a href="{{ url_for('index') }}" class="btn-inicio">
+                <i class="fas fa-home"></i> Volver al inicio
+            </a>
+
+            <div class="divider"></div>
+
+            <p class="info-text">Puedes conocer más sobre nosotros aquí</p>
+            <a href="{{ url_for('index') }}#especialidades" class="btn-info">
+                <i class="fas fa-stethoscope"></i> Ver nuestros servicios
+            </a>
+
+            <div class="divider"></div>
+
+            <p class="contacto-title">Para más información contáctanos</p>
+            <div class="contacto-links">
+                <a href="https://wa.me/51XXXXXXXXX" target="_blank" class="contacto-btn whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="https://facebook.com/moovaclinic" target="_blank" class="contacto-btn facebook">
+                    <i class="fab fa-facebook"></i>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://twitter.com/moovaclinic" target="_blank" class="contacto-btn twitter">
+                    <i class="fab fa-twitter"></i>
+                    <span>Twitter</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

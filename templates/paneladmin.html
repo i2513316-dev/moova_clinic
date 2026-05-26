@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - MOOVA Clinic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='paneladmin.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <img src="{{ url_for('static', filename='image.png') }}" alt="MOOVA Clinic">
+        <div class="logo">MOOVA <span>Clinic</span></div>
+        <div class="header-right">
+            <span class="bienvenida">
+                <i class="fas fa-shield-alt"></i>
+                {{ session.admin }}
+            </span>
+            <a href="{{ url_for('interfaz') }}" class="btn-header">
+                <i class="fas fa-calendar-alt"></i> Ver Horarios
+            </a>
+            <a href="{{ url_for('index') }}" class="btn-header">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="{{ url_for('logout') }}" class="btn-salir">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="page-wrap">
+
+    <div class="page-title">
+        <h1><i class="fas fa-users-cog"></i> Gestión de Personal Médico</h1>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                {% if msg.startswith('exito:') %}
+                <div class="alerta exito">
+                    <i class="fas fa-check-circle"></i> {{ msg[6:] }}
+                </div>
+                {% else %}
+                <div class="alerta error">
+                    <i class="fas fa-exclamation-circle"></i> {{ msg }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="panel-grid">
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user-plus"></i>
+                <h2>Nuevo Médico</h2>
+            </div>
+            <form method="POST">
+                <input type="hidden" name="accion" value="registrar">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" name="nombre" placeholder="Dr. Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label>Especialidad</label>
+                    <input type="text" name="especialidad" placeholder="Fisioterapia" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input type="email" name="correo" placeholder="medico@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" name="clave" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-plus"></i> Registrar
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-list"></i>
+                <h2>Médicos Registrados</h2>
+            </div>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Médico</th>
+                            <th>Especialidad</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if medicos %}
+                            {% for m in medicos %}
+                            <tr>
+                                <td>
+                                    <div class="medico-info">
+                                        <div class="avatar">{{ m.Nombre[0].upper() }}</div>
+                                        {{ m.Nombre }}
+                                    </div>
+                                </td>
+                                <td><span class="tag">{{ m.Especialidad }}</span></td>
+                                <td class="correo-td">{{ m.Correo }}</td>
+                                <td>
+                                    <div class="acciones">
+                                        <button class="btn-clave"
+                                            onclick="abrirClave('{{ m.ID }}', '{{ m.Nombre }}')">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                        <form method="POST"
+                                            onsubmit="return confirm('¿Eliminar a {{ m.Nombre }}?')">
+                                            <input type="hidden" name="accion" value="eliminar">
+                                            <input type="hidden" name="medico_id" value="{{ m.ID }}">
+                                            <button type="submit" class="btn-eliminar">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="empty">No hay médicos registrados.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Proximas citas -->
+    <div class="card" style="margin-top:32px; grid-column:1/-1;">
+        <div class="card-header">
+            <i class="fas fa-calendar-alt"></i>
+            <h2>Próximas Citas Programadas</h2>
+        </div>
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Paciente</th>
+                        <th>DNI</th>
+                        <th>Teléfono</th>
+                        <th>Especialista</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if proximas_citas %}
+                        {% for c in proximas_citas %}
+                        <tr>
+                            <td><strong>{{ c.fecha_cita }}</strong></td>
+                            <td>{{ c.nombre }} {{ c.apellido }}</td>
+                            <td>{{ c.dni }}</td>
+                            <td>{{ c.telefono }}</td>
+                            <td><span class="tag">{{ c.terapeuta }}</span></td>
+                            <td>
+                                {% if c.estado == 'programada' %}
+                                <span style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:50px;font-size:0.85rem;font-weight:600;">Programada</span>
+                                {% elif c.estado == 'cancelada' %}
+                                <span style="background:#fee2e2;color:#b91c1c;padding:4px 10px;border-radius:50px;font-size:0.85rem;font-weight:600;">Cancelada</span>
+                                {% else %}
+                                <span style="background:#e0f2fe;color:#0369a1;padding:4px 10px;border-radius:50px;font-size:0.85rem;font-weight:600;">Completada</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if c.estado == 'programada' %}
+                                <form method="POST" action="{{ url_for('admin_cancelar_cita', cita_id=c.id) }}"
+                                    onsubmit="return confirm('¿Cancelar la cita de {{ c.nombre }}?')">
+                                    <button type="submit" class="btn-eliminar">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </form>
+                                {% else %}
+                                <span style="color:#aaa;">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="7" class="empty">No hay citas próximas.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cambiar contraseña -->
+<div class="modal-overlay" id="modal" onclick="cerrarModal(event)">
+    <div class="modal-card">
+        <h3><i class="fas fa-key"></i> Cambiar Contraseña</h3>
+        <p id="modal-nombre"></p>
+        <form method="POST">
+            <input type="hidden" name="accion" value="cambiar_clave">
+            <input type="hidden" name="medico_id" id="modal-id">
+            <div class="form-group">
+                <label>Nueva contraseña</label>
+                <input type="password" name="nueva_clave" placeholder="••••••••" required>
+            </div>
+            <div class="modal-btns">
+                <button type="button" class="btn-cancelar"
+                    onclick="document.getElementById('modal').style.display='none'">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function abrirClave(id, nombre) {
+        document.getElementById('modal-id').value = id;
+        document.getElementById('modal-nombre').textContent = nombre;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function cerrarModal(e) {
+        if (e.target.id === 'modal') {
+            document.getElementById('modal').style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Cita - MOOVA Clinic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='citas.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='image.png') }}" alt="Logo Moova Clinic">
+            <div class="logo">MOOVA <span>Clinic</span></div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li class="dropdown-wrap">
+                        <button class="btn-cita dropdown-toggle" type="button">
+                            <i class="fas fa-calendar-check"></i> Citas <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="{{ url_for('citas') }}" class="dropdown-item"><i class="fas fa-calendar-plus"></i><span>Agendar cita</span></a>
+                            <a href="{{ url_for('modificar_cita') }}" class="dropdown-item"><i class="fas fa-edit"></i><span>Modificar cita</span></a>
+                            <a href="{{ url_for('cancelar_cita') }}" class="dropdown-item"><i class="fas fa-times-circle"></i><span>Cancelar cita</span></a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-wrap">
+        <div class="page-header">
+            <span class="subtitle">Cambia tu reserva</span>
+            <h1><i class="fas fa-edit"></i> Modificar Cita</h1>
+            <p>Verificación en dos pasos para proteger tu cita</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    {% if msg.startswith('exito:') %}
+                    <div class="alerta exito"><i class="fas fa-check-circle"></i> {{ msg[6:] }}</div>
+                    {% else %}
+                    <div class="alerta error"><i class="fas fa-exclamation-circle"></i> {{ msg }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% if not paso and not citas %}
+        <!-- PASO 1: Ingresar DNI -->
+        <div class="container" style="justify-content:center;">
+            <div class="form-container" style="max-width:480px; width:100%;">
+                <div class="form-header">
+                    <div class="form-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h2>Verificación por SMS</h2>
+                    <p style="color:var(--text-soft); font-size:0.9rem; margin-top:6px;">
+                        Te enviaremos un código de 6 dígitos al teléfono que registraste al agendar tu cita.
+                    </p>
+                </div>
+                <form method="POST">
+                    <input type="hidden" name="accion" value="solicitar">
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> Tu DNI</label>
+                        <input type="text" name="dni" placeholder="12345678" maxlength="8" pattern="[0-9]{8}" required autofocus>
+                    </div>
+                    <button type="submit" class="btn-submit" style="opacity:1; cursor:pointer;">
+                        <i class="fas fa-paper-plane"></i> Enviar código SMS
+                    </button>
+                </form>
+                {% if error %}
+                <div class="alerta error" style="margin-top:16px;"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% if paso == 'verificar' %}
+        <!-- PASO 2: Ingresar OTP -->
+        <div class="container" style="justify-content:center;">
+            <div class="form-container" style="max-width:480px; width:100%;">
+                <div class="form-header">
+                    <div class="form-icon" style="background:linear-gradient(135deg,#10b981,#059669);"><i class="fas fa-shield-alt"></i></div>
+                    <h2>Ingresa tu código</h2>
+                    <p style="color:var(--text-soft); font-size:0.9rem; margin-top:6px;">
+                        Enviamos un código SMS al número <strong>{{ tel_mask }}</strong>.<br>
+                        Válido por 10 minutos.
+                    </p>
+                </div>
+                <form method="POST">
+                    <input type="hidden" name="accion" value="verificar">
+                    <input type="hidden" name="dni" value="{{ dni }}">
+                    <div class="form-group">
+                        <label><i class="fas fa-key"></i> Código de 6 dígitos</label>
+                        <input type="text" name="otp" placeholder="_ _ _ _ _ _"
+                               maxlength="6" pattern="[0-9]{6}" required autofocus
+                               style="font-size:1.8rem; letter-spacing:0.5rem; text-align:center; font-family:'Fredoka',sans-serif; font-weight:600;">
+                    </div>
+                    <button type="submit" class="btn-submit" style="opacity:1; cursor:pointer;">
+                        <i class="fas fa-check-circle"></i> Verificar código
+                    </button>
+                </form>
+                {% if error %}
+                <div class="alerta error" style="margin-top:16px;"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
+                {% endif %}
+                <p style="text-align:center; margin-top:16px; font-size:0.88rem; color:var(--text-soft);">
+                    ¿No recibiste el SMS?
+                    <a href="{{ url_for('modificar_cita') }}" style="color:var(--accent); font-weight:600;">Intentar de nuevo</a>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+        {% if citas %}
+        <!-- PASO 3: Editar citas -->
+        <div class="container" style="margin-top:32px; flex-direction:column; align-items:center;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+                <span style="background:#d1fae5; color:#065f46; padding:6px 16px; border-radius:50px; font-size:0.9rem; font-weight:600;">
+                    <i class="fas fa-shield-alt"></i> Identidad verificada
+                </span>
+                <h3 style="color:var(--navy);">Selecciona la cita a modificar</h3>
+            </div>
+
+            {% for c in citas %}
+            <div class="card-cita" style="background:#fff; border:2px solid var(--border); border-radius:16px; padding:24px; margin-bottom:20px; width:100%; max-width:780px; box-shadow:0 4px 16px rgba(26,58,92,0.08);">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+                    <div>
+                        <strong style="font-size:1.1rem; color:var(--navy);">{{ c.nombre }} {{ c.apellido }}</strong>
+                        <span class="especialidad-tag" style="margin-left:10px;">{{ c.terapeuta }}</span>
+                    </div>
+                    <span style="background:var(--sky-pale); color:var(--accent); padding:6px 14px; border-radius:50px; font-weight:600;">
+                        <i class="fas fa-calendar"></i> {{ c.fecha_cita }}
+                    </span>
+                </div>
+                <form method="POST">
+                    <input type="hidden" name="accion" value="guardar">
+                    <input type="hidden" name="cita_id" value="{{ c.id }}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Nueva fecha</label>
+                            <input type="date" name="fecha_cita" value="{{ c.fecha_cita }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-user-md"></i> Nuevo especialista</label>
+                            <select name="medico_id" class="form-select" required style="padding:12px; border:2px solid var(--border); border-radius:10px; font-family:inherit; width:100%;">
+                                {% for t in terapeutas %}
+                                <option value="{{ t.ID }}" {% if t.ID == c.terapeuta_id %}selected{% endif %}>
+                                    {{ t.Nombre }} — {{ t.Especialidad }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit" style="opacity:1; cursor:pointer; margin-top:8px;">
+                        <i class="fas fa-save"></i> Guardar cambios
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+<script>
+    const hoy = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('input[type="date"]').forEach(i => i.setAttribute('min', hoy));
+</script>
+<script>
+document.querySelectorAll('.dropdown-wrap').forEach(function(wrap) {
+    wrap.querySelector('.dropdown-toggle').addEventListener('click', function(e) {
+        e.stopPropagation(); wrap.classList.toggle('open');
+    });
+});
+document.addEventListener('click', function() {
+    document.querySelectorAll('.dropdown-wrap.open').forEach(function(w) { w.classList.remove('open'); });
+});
+</script>
+</body>
+</html>

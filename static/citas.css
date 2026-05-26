@@ -1,0 +1,490 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap');
+
+:root {
+    --white: #ffffff;
+    --navy: #1a3a5c;
+    --navy-dark: #0f2640;
+    --sky: #5aacdf;
+    --sky-light: #a8d8f0;
+    --sky-pale: #ddf0fb;
+    --accent: #2271b3;
+    --accent-soft: #e3f1fb;
+    --text: #2c3e50;
+    --text-soft: #6b87a0;
+    --border: #c9e2f5;
+    --shadow: 0 8px 32px rgba(26,58,92,0.10);
+    --shadow-hover: 0 16px 48px rgba(26,58,92,0.18);
+    --radius: 20px;
+    --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --green: #22c55e;
+    --green-soft: #dcfce7;
+    --yellow: #f59e0b;
+    --yellow-soft: #fef3c7;
+    --red: #ef4444;
+    --red-soft: #fee2e2;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #e6f2fb 0%, #f5faff 50%, #eaf5fd 100%);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f0f7ff; }
+::-webkit-scrollbar-thumb { background: var(--sky); border-radius: 6px; }
+
+/* ── HEADER ── */
+header {
+    position: fixed;
+    top: 0; width: 100%;
+    z-index: 1000;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(18px);
+    border-bottom: 2px solid var(--border);
+    box-shadow: 0 4px 20px rgba(26,58,92,0.07);
+}
+
+.header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    padding: 0 36px;
+    gap: 20px;
+}
+
+.header-container img {
+    height: 44px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.logo {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--navy);
+    white-space: nowrap;
+}
+.logo span { color: var(--sky); }
+
+nav ul { list-style: none; display: flex; gap: 12px; align-items: center; }
+nav ul li a {
+    color: var(--text-soft);
+    text-decoration: none;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: 50px;
+    border: 2px solid var(--border);
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+nav ul li a:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--sky-light);
+}
+
+/* ── PAGE WRAP ── */
+.page-wrap {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 110px 36px 60px;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.subtitle {
+    display: inline-block;
+    color: var(--accent);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding: 5px 16px;
+    border: 2px solid var(--sky-light);
+    border-radius: 50px;
+    background: var(--accent-soft);
+}
+
+.page-header h1 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 10px;
+}
+
+.page-header p {
+    color: var(--text-soft);
+    font-size: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* ── ALERTAS ── */
+.alerta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    border-radius: var(--radius);
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 28px;
+    border: 2px solid;
+}
+
+.alerta.exito {
+    background: var(--green-soft);
+    color: #15803d;
+    border-color: #86efac;
+}
+.alerta.error {
+    background: var(--red-soft);
+    color: #b91c1c;
+    border-color: #fca5a5;
+}
+.alerta.advertencia {
+    background: var(--yellow-soft);
+    color: #92400e;
+    border-color: #fcd34d;
+}
+.alerta i { font-size: 1.2rem; }
+
+/* ── CONTAINER ── */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 28px;
+    align-items: start;
+}
+
+/* ── TARJETAS ── */
+.form-container,
+.table-container {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    box-shadow: var(--shadow);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.form-icon {
+    width: 60px; height: 60px;
+    background: var(--accent-soft);
+    border: 2px solid var(--sky-light);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+}
+.form-icon i { font-size: 1.5rem; color: var(--accent); }
+
+.form-header h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+.form-header p { color: var(--text-soft); font-size: 0.88rem; }
+
+/* ── FORM ── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+label {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+label i { color: var(--sky); font-size: 0.85rem; }
+
+input {
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    font-size: 0.95rem;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    background: #f8fcff;
+    transition: all 0.25s ease;
+}
+input:focus {
+    border-color: var(--sky);
+    outline: none;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(90,172,223,0.12);
+}
+input::placeholder { color: #b0c8d4; }
+
+/* ── MÉDICO BADGE ── */
+.medico-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent-soft);
+    border: 2px solid var(--sky-light);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    color: var(--accent);
+    font-weight: 500;
+}
+.medico-badge i { color: var(--sky); }
+.badge-remove {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: var(--text-soft);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.badge-remove:hover { color: var(--red); background: var(--red-soft); }
+
+/* ── BOTÓN SUBMIT ── */
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--sky));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(34,113,179,0.3);
+    transition: var(--transition);
+}
+.btn-submit:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(34,113,179,0.45);
+}
+.btn-submit:disabled {
+    background: var(--border);
+    color: var(--text-soft);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ── TABLA ── */
+.table-wrapper { overflow-x: auto; border-radius: 14px; }
+
+table { width: 100%; border-collapse: collapse; }
+
+thead tr {
+    background: linear-gradient(135deg, var(--navy), var(--accent));
+}
+th {
+    color: white;
+    padding: 15px 16px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: left;
+}
+th:last-child { text-align: center; }
+
+td {
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 0.9rem;
+    border-bottom: 2px solid #f0f7ff;
+    vertical-align: middle;
+}
+
+tbody tr { transition: background 0.2s ease; }
+tbody tr:hover { background: var(--sky-pale); }
+tbody tr.fila-seleccionada { background: var(--accent-soft) !important; }
+
+/* Avatar médico */
+.medico-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.medico-avatar {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--sky));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+/* Tag especialidad */
+.especialidad-tag {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--sky-light);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
+}
+
+/* Botón elegir */
+.btn-seleccionar {
+    background: linear-gradient(135deg, var(--accent), var(--sky));
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 auto;
+    box-shadow: 0 3px 12px rgba(34,113,179,0.25);
+    transition: var(--transition);
+}
+.btn-seleccionar:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(34,113,179,0.4);
+}
+
+/* Fila vacía */
+.empty-row {
+    text-align: center;
+    color: var(--text-soft);
+    padding: 30px !important;
+    font-family: 'Fredoka', sans-serif;
+}
+.empty-row i { margin-right: 8px; }
+
+/* ── Que sea responsivo ── */
+@media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+    .page-wrap { padding: 100px 18px 40px; }
+    .header-container { padding: 0 18px; }
+    .form-container, .table-container { padding: 24px 18px; }
+}
+/* ── CITAS DROPDOWN ── */
+.dropdown-wrap { position: relative; }
+
+.dropdown-toggle {
+    background: linear-gradient(135deg, var(--accent), var(--sky)) !important;
+    color: white !important;
+    padding: 10px 22px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    font-family: 'Fredoka', sans-serif !important;
+    font-size: 1rem !important;
+    border: none !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 16px rgba(34,113,179,0.3) !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+.dropdown-toggle:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(34,113,179,0.45) !important;
+}
+.dropdown-arrow { font-size: 0.7rem !important; transition: transform 0.3s ease !important; }
+.dropdown-wrap.open .dropdown-arrow { transform: rotate(180deg); }
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(26,58,92,0.15);
+    padding: 8px;
+    min-width: 200px;
+    z-index: 9999;
+    animation: dropIn 0.2s ease;
+}
+@keyframes dropIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.dropdown-wrap.open .dropdown-menu { display: block; }
+
+.dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 16px !important;
+    border-radius: 10px !important;
+    color: var(--text) !important;
+    font-family: 'Fredoka', sans-serif !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    transition: background 0.2s ease !important;
+    white-space: nowrap !important;
+}
+.dropdown-item:hover { background: var(--accent-soft) !important; color: var(--accent) !important; }
+.dropdown-item i { width: 18px; text-align: center; color: var(--accent); }

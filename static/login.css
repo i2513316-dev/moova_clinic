@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap');
+
+:root {
+    --white: #ffffff;
+    --navy: #1a3a5c;
+    --navy-dark: #0f2640;
+    --sky: #5aacdf;
+    --sky-light: #a8d8f0;
+    --sky-pale: #ddf0fb;
+    --accent: #2271b3;
+    --accent-soft: #e3f1fb;
+    --text: #2c3e50;
+    --text-soft: #6b87a0;
+    --border: #c9e2f5;
+    --shadow: 0 8px 32px rgba(26,58,92,0.12);
+    --shadow-hover: 0 16px 48px rgba(26,58,92,0.2);
+    --radius: 20px;
+    --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --red: #ef4444;
+    --red-soft: #fee2e2;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(90,172,223,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 30%, rgba(34,113,179,0.10) 0%, transparent 55%),
+        linear-gradient(160deg, #e8f4fd 0%, #f5faff 50%, #ddeefa 100%);
+    padding: 30px 20px;
+}
+
+/* Círculos decorativos de fondo */
+body::before {
+    content: '';
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    border: 2px solid rgba(90,172,223,0.1);
+    top: -150px; right: -150px;
+    animation: spinSlow 30s linear infinite;
+    pointer-events: none;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 2px solid rgba(90,172,223,0.07);
+    bottom: -80px; left: -80px;
+    animation: spinSlow 20s linear infinite reverse;
+    pointer-events: none;
+}
+
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Tarjeta principal */
+.login-wrap {
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    z-index: 1;
+}
+
+.login-card {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px 36px;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.7s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo */
+.login-logo {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.login-logo img {
+    height: 60px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.logo {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+.logo span { color: var(--sky); }
+
+.login-logo p {
+    color: var(--text-soft);
+    font-size: 0.9rem;
+}
+
+/* Formulario */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+label {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+label i { color: var(--sky); font-size: 0.85rem; }
+
+input {
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    font-size: 0.95rem;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    background: #f8fcff;
+    transition: all 0.25s ease;
+    width: 100%;
+}
+input:focus {
+    border-color: var(--sky);
+    outline: none;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(90,172,223,0.12);
+}
+input::placeholder { color: #b0c8d4; }
+
+/* Campo contraseña con botón ojo */
+.input-password {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input-password input { padding-right: 48px; }
+
+.toggle-pass {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-soft);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    transition: color 0.2s;
+}
+.toggle-pass:hover { color: var(--accent); }
+
+/* Alerta error */
+.alerta.error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--red-soft);
+    color: #b91c1c;
+    border: 2px solid #fca5a5;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+.alerta.error i { font-size: 1.1rem; }
+
+/* Botón ingresar */
+.btn-ingresar {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--sky));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(34,113,179,0.3);
+    transition: var(--transition);
+    margin-top: 6px;
+}
+.btn-ingresar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(34,113,179,0.45);
+}
+
+/* Footer del login */
+.login-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border);
+}
+
+.login-footer a {
+    color: var(--text-soft);
+    text-decoration: none;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.25s ease;
+    padding: 8px 16px;
+    border-radius: 50px;
+}
+.login-footer a:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+
+@media (max-width: 480px) {
+    .login-card { padding: 30px 22px; }
+}

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOOVA Clinic - Centro de Rehabilitación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='image.png') }}" alt="Logo Moova Clinic">
+            <div class="logo">MOOVA <span>Clinic</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#especialidades">Especialidades</a></li>
+                    <li><a href="#galeria">Galería</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li class="dropdown-wrap">
+                        <button class="btn-cita dropdown-toggle" type="button">
+                            <i class="fas fa-calendar-check"></i> Citas <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="{{ url_for('citas') }}" class="dropdown-item">
+                                <i class="fas fa-calendar-plus"></i>
+                                <span>Agendar cita</span>
+                            </a>
+                            <a href="{{ url_for('modificar_cita') }}" class="dropdown-item">
+                                <i class="fas fa-edit"></i>
+                                <span>Modificar cita</span>
+                            </a>
+                            <a href="{{ url_for('cancelar_cita') }}" class="dropdown-item">
+                                <i class="fas fa-times-circle"></i>
+                                <span>Cancelar cita</span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" aria-label="Menú">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Centro de Rehabilitación</h1>
+            <p>Recupera tu calidad de vida con nuestros programas especializados de rehabilitación física, neurológica y deportiva</p>
+            <a href="#especialidades" class="btn-hero">
+                <i class="fas fa-arrow-down"></i> Conoce nuestros servicios
+            </a>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <h3>000</h3>
+                <p>Pacientes Recuperados</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-user-md"></i>
+                <h3>0</h3>
+                <p>Especialistas</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-award"></i>
+                <h3>0</h3>
+                <p>Años de Experiencia</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-clinic-medical"></i>
+                <h3>98%</h3>
+                <p>Tasa de Éxito</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="especialidades" class="especialidades">
+        <div class="section-title">
+            <span class="subtitle">Nuestros Servicios</span>
+            <h2>Especialidades en Rehabilitación</h2>
+            <p>Ofrecemos programas integrales adaptados a las necesidades de cada paciente</p>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-hands"></i></div>
+                <h3>Fisioterapia</h3>
+                <p>Tratamientos manuales y técnicas especializadas para restaurar el movimiento y la función física.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Terapia manual</li>
+                    <li><i class="fas fa-check"></i> Electroterapia</li>
+                    <li><i class="fas fa-check"></i> Ultrasonido terapéutico</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card featured">
+                <div class="card-badge">Popular</div>
+                <div class="card-icon"><i class="fas fa-brain"></i></div>
+                <h3>Rehabilitación Neurológica</h3>
+                <p>Programas especializados para pacientes con lesiones cerebrales, ACV, esclerosis múltiple y Parkinson.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Neuroplasticidad</li>
+                    <li><i class="fas fa-check"></i> Estimulación cognitiva</li>
+                    <li><i class="fas fa-check"></i> Coordinación motora</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-running"></i></div>
+                <h3>Rehabilitación Deportiva</h3>
+                <p>Recuperación de lesiones deportivas con técnicas avanzadas y equipamiento especializado.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Lesiones musculares</li>
+                    <li><i class="fas fa-check"></i> Rehabilitación de ligamentos</li>
+                    <li><i class="fas fa-check"></i> Readaptación deportiva</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <h3>Terapia Ocupacional</h3>
+                <p>Recuperación de la independencia en actividades cotidianas y mejora de la calidad de vida.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Actividades de la vida diaria</li>
+                    <li><i class="fas fa-check"></i> Adaptación del hogar</li>
+                    <li><i class="fas fa-check"></i> Reintegración laboral</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-heartbeat"></i></div>
+                <h3>Rehabilitación Cardiopulmonar</h3>
+                <p>Ejercicio supervisado y educación para pacientes con enfermedades cardíacas y respiratorias.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Post-infarto</li>
+                    <li><i class="fas fa-check"></i> EPOC</li>
+                    <li><i class="fas fa-check"></i> Capacidad aeróbica</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-water"></i></div>
+                <h3>Hidroterapia</h3>
+                <p>Terapia acuática en piscina climatizada, ideal para artritis y lesiones articulares.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Piscina terapéutica</li>
+                    <li><i class="fas fa-check"></i> Ejercicios acuáticos</li>
+                    <li><i class="fas fa-check"></i> Relajación muscular</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-user-nurse"></i></div>
+                <h3>Rehabilitación Geriátrica</h3>
+                <p>Atención especializada para adultos mayores enfocada en movilidad, equilibrio y prevención de caídas.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Equilibrio y marcha</li>
+                    <li><i class="fas fa-check"></i> Fortalecimiento</li>
+                    <li><i class="fas fa-check"></i> Prevención de caídas</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-comments"></i></div>
+                <h3>Terapia del Habla</h3>
+                <p>Rehabilitación de trastornos del lenguaje, habla y deglución causados por lesiones.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Afasia</li>
+                    <li><i class="fas fa-check"></i> Disfagia</li>
+                    <li><i class="fas fa-check"></i> Disartria</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-child"></i></div>
+                <h3>Rehabilitación Pediátrica</h3>
+                <p>Terapias para niños con retrasos en el desarrollo, parálisis cerebral y condiciones pediátricas.</p>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> Desarrollo motor</li>
+                    <li><i class="fas fa-check"></i> Estimulación temprana</li>
+                    <li><i class="fas fa-check"></i> Terapia de juego</li>
+                </ul>
+                <a href="#" class="btn">Más información</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="galeria" class="galeria">
+        <div class="galeria-inner">
+            <div class="section-title">
+                <span class="subtitle">Instalaciones</span>
+                <h2>Conoce Nuestro Centro</h2>
+                <p>Espacios modernos y equipados para tu recuperación</p>
+            </div>
+            <div class="galeria-grid">
+                <div class="galeria-item">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                    <span>Video principal</span>
+                </div>
+                <div class="galeria-item">
+                    <i class="fas fa-image"></i>
+                    <span>Sala de fisioterapia</span>
+                </div>
+                <div class="galeria-item">
+                    <i class="fas fa-image"></i>
+                    <span>Área de hidroterapia</span>
+                </div>
+                <div class="galeria-item">
+                    <i class="fas fa-image"></i>
+                    <span>Equipos especializados</span>
+                </div>
+                <div class="galeria-item">
+                    <i class="fas fa-play"></i>
+                    <span>Testimonios de pacientes</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="proceso">
+        <div class="section-title">
+            <span class="subtitle">¿Cómo trabajamos?</span>
+            <h2>Nuestro Proceso de Rehabilitación</h2>
+        </div>
+        <div class="proceso-container">
+            <div class="proceso-step">
+                <div class="step-number">1</div>
+                <h3>Evaluación Inicial</h3>
+                <p>Diagnóstico completo de tu condición física y objetivos de recuperación.</p>
+            </div>
+            <div class="proceso-step">
+                <div class="step-number">2</div>
+                <h3>Plan Personalizado</h3>
+                <p>Diseñamos un programa de rehabilitación adaptado a tus necesidades específicas.</p>
+            </div>
+            <div class="proceso-step">
+                <div class="step-number">3</div>
+                <h3>Tratamiento Activo</h3>
+                <p>Sesiones de terapia con seguimiento continuo y ajustes según tu progreso.</p>
+            </div>
+            <div class="proceso-step">
+                <div class="step-number">4</div>
+                <h3>Alta y Seguimiento</h3>
+                <p>Programa de mantenimiento y recomendaciones para prevenir recaídas.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="logo">MOOVA <span>Clinic</span></div>
+                <p>Centro de Rehabilitación especializado en devolver la calidad de vida a nuestros pacientes.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Especialidades</h3>
+                <ul>
+                    <li><a href="#">Fisioterapia</a></li>
+                    <li><a href="#">Rehabilitación Neurológica</a></li>
+                    <li><a href="#">Rehabilitación Deportiva</a></li>
+                    <li><a href="#">Terapia Ocupacional</a></li>
+                    <li><a href="#">Hidroterapia</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="#">Nuestro Equipo</a></li>
+                    <li><a href="#">Instalaciones</a></li>
+                    <li><a href="#">Blog de Salud</a></li>
+                    <li><a href="#">Trabaja con Nosotros</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> Jr. Federico Gálvez Duran #235., Ciudad</p>
+                    <p><i class="fas fa-phone"></i> +----------</p>
+                    <p><i class="fas fa-envelope"></i> info@moovaclinic.com</p>
+                    <p><i class="fas fa-clock"></i> Lun - Vie: 9:00 - 5:00</p>
+                    <p><i class="fas fa-clock"></i> Sáb: 9:30 - 14:00</p>
+                    <p><i class="fas fa-file-alt"></i> RUC: 10738665835</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 MOOVA Clinic - Centro de Rehabilitación. Todos los derechos reservados.</p>
+        </div>
+        <a href="{{ url_for('login') }}" class="btn-login-footer">🔑 Acceso médicos</a>
+    </footer>
+
+
+<script>
+// Dropdown citas
+document.querySelectorAll('.dropdown-wrap').forEach(function(wrap) {
+    var toggle = wrap.querySelector('.dropdown-toggle');
+    toggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        wrap.classList.toggle('open');
+    });
+});
+document.addEventListener('click', function() {
+    document.querySelectorAll('.dropdown-wrap.open').forEach(function(w) { w.classList.remove('open'); });
+});
+</script>
+</body>
+</html>

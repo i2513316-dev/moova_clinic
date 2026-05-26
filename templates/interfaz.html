@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios - MOOVA Clinic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='interfaz.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <img src="{{ url_for('static', filename='image.png') }}" alt="MOOVA Clinic">
+        <div class="logo">MOOVA <span>Clinic</span></div>
+        <div class="header-right">
+            <span class="bienvenida">
+                <i class="fas fa-{{ 'shield-alt' if es_admin else 'user-md' }}"></i>
+                {{ nombre_usuario }}
+            </span>
+            {% if es_admin %}
+            <a href="{{ url_for('panel_admin') }}" class="btn-header">
+                <i class="fas fa-users-cog"></i> Panel Admin
+            </a>
+            {% endif %}
+            <a href="{{ url_for('index') }}" class="btn-header">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="{{ url_for('logout') }}" class="btn-salir">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="page-wrap">
+
+    <div class="dia-nav">
+        <a href="{{ url_for('interfaz', fecha=ayer) }}" class="btn-dia">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="dia-info">
+            <span class="dia-semana">{{ dia_semana }}</span>
+            <span class="dia-fecha">{{ fecha_display }}</span>
+            {% if es_hoy %}
+            <span class="badge-hoy">Hoy</span>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('interfaz', fecha=manana) }}" class="btn-dia">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+
+    <div class="tabla-container">
+        <div class="tabla-header">
+            <h2><i class="fas fa-clipboard-list"></i> Pacientes del día</h2>
+            <span class="contador">{{ pacientes|length }} paciente(s)</span>
+        </div>
+
+        {% if pacientes %}
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>DNI</th>
+                        <th>Teléfono</th>
+                        <th>Estado</th>
+                        <th>Notas de sesión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pacientes %}
+                    <tr class="{{ 'fila-nuevo' if p.total_visitas == 1 else 'fila-recurrente' }}">
+                        <td>
+                            <div class="paciente-info">
+                                <div class="paciente-avatar {{ 'avatar-nuevo' if p.total_visitas == 1 else 'avatar-recurrente' }}">
+                                    {{ p.nombre[0].upper() }}
+                                </div>
+                                <div>
+                                    <div class="paciente-nombre">{{ p.nombre }} {{ p.apellido }}</div>
+                                    <div class="paciente-visitas">{{ p.total_visitas }} visita(s)</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ p.dni }}</td>
+                        <td>
+                            <a href="tel:{{ p.telefono }}" class="tel-link">
+                                <i class="fas fa-phone"></i> {{ p.telefono }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if p.total_visitas == 1 %}
+                            <span class="badge-nuevo"><i class="fas fa-star"></i> Nuevo</span>
+                            {% else %}
+                            <span class="badge-recurrente"><i class="fas fa-redo"></i> Recurrente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('guardar_descripcion') }}" class="form-descripcion">
+                                <input type="hidden" name="historial_id" value="{{ p.historial_id }}">
+                                <input type="hidden" name="fecha" value="{{ fecha_actual }}">
+                                <textarea name="descripcion" placeholder="Notas..." rows="2">{{ p.descripcion or '' }}</textarea>
+                                <button type="submit" class="btn-guardar">
+                                    <i class="fas fa-save"></i> Guardar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="sin-pacientes">
+            <i class="fas fa-calendar-times"></i>
+            <p>Sin pacientes para este día</p>
+            <span>Navega con las flechas para ver otros días</span>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+</body>
+</html>
